@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: baseHeader(~{::title},~{::link})">
+    <meta charset="utf-8">
+    <title>Редактирование объявления</title>
+
+    <!-- Собственный стиль-->
+    <link rel="stylesheet" href="/static/css/advert/post_advert.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+</head>
+
+<body>
+<header th:replace="fragments/general.html :: header"></header>
+
+<!--                     Section1                             -->
+<section class="section_1">
+    <div class="section1_container">
+        <div class="head_adv">
+            <h1>Редактирование объявления</h1>
+            <p>Заполните все поля</p>
+        </div>
+    </div>
+</section>
+
+<!--                     Section2                             -->
+<!--                     Filters                              -->
+
+<section class="section_2">
+
+    <div th:if="${editError} != null" class="global">
+        <p th:text="${editError}" class="invalid_autorisation" id="invalid_autorisation_global"></p>
+    </div>
+
+
+    <form th:action="@{'/advert/'+ ${editAdvert.id} +'/edit'}" method = "post" th:object="${editAdvert}" enctype="multipart/form-data" class="section_2_container">
+
+
+
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}" th:class="error">Input is incorrect</li>
+        </ul>
+
+
+
+        <input type="hidden" th:field="*{advert}" name="advert" placeholder="Заголовок товара">
+
+        <div class="advert_filters">
+
+            <!--------------------Заголовок и описание товара------------------------------>
+            <div class="title_advert advert_filters">
+                <div>
+                    <p>Укажите заголовок товара<span class="required">*</span></p>
+                    <input th:field="*{headline}" name="headline" type="text" placeholder="Заголовок товара" maxlength="70" class="input" autocomplete="off" autofocus required>
+                    <p th:if="${#fields.hasErrors('headline')}" th:errors="*{headline}" th:errorclass="error" class="invalid_autorisation"></p>
+                </div>
+                <!--<hr noshade color="white" 1px >-->
+                <div>
+                    <p>Укажите описание товара<span class="required">*</span></p>
+                    <textarea th:field="*{description}" name="description" class="textarea" rows="8" cols="80" placeholder="Описание товара" maxlength="5000" required></textarea>
+                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" th:errorclass="error" class="invalid_autorisation"></p>
+                </div>
+            </div>
+            <!-------------------------------------------------->
+
+            <hr>
+
+            <!---------------Фильтр цены----------------------------------->
+            <div class="advert_filters">
+
+                <p>Цена<span class="required">*</span></p>
+                <div class="price_input">
+
+                    <div class="start_price">
+                        <p>Начальная цена</p>
+                        <input th:field="*{priceMax}" name="priceMax" type="text" class="input" onkeyup="return only_num(this);" onchange="return only_num(this);" required autocomplete="off">
+                    </div>
+
+                    <div class="last_price">
+                        <p>снизить цену до</p>
+                        <input th:field="*{priceMin}" name="priceMin" type="text" class="input" th:classappend="${lower}=='on'? 'disable' :''"
+                               id="input_low" onkeyup="return only_num(this);" onchange="return only_num(this);">
+                    </div>
+                </div>
+
+                <p th:text="${priceMinError}" class="invalid_autorisation" style="margin: -15px 0 15px 0;"></p>
+
+                <div class="checkbox_func">
+                    <label>
+                        <input type="checkbox" name="lower" th:checked="${lower}" class="checkbox" onclick="ONclick()" id="checkbox">
+                        <span class="fake"></span>
+                        <span class="checkbox_text">Не снижать цену</span>
+                    </label>
+                </div>
+
+                <p id="hint"> Нажмите на <span>"Не снижать цену"</span>, чтобы цена не снижалась на второй неделе.</p>
+
+            </div>
+            <!-------------------------------------------------->
+
+            <hr>
+
+            <!-----------------Загрузить фото в объявление--------------------------------->
+            <div class="add_advert_photo advert_filters">
+                <p>Добавьте фото товара<span class="required">*</span></p>
+
+                <div class="upload_img">
+
+                    <!-- заменить               заменить-->
+
+                    <div th:each="photo : ${editAdvert.advert.photos}" class="upload_container">
+<!--                        <input type="hidden" th:field="*{photos}">-->
+                        <label th:for="'inputFile' + ${photo.number}"><img th:src="'/img/' + ${photo.filename}" th:id="'blah' + ${photo.number}" alt="Img" class="img_container" on></label>
+                        <input type="text" th:name="'editNumber[' + ${photo.number} + ']'" th:id="'text' + ${photo.number}" style="display: none;">
+                        <input type="file" th:id="'inputFile' + ${photo.number}" th:name="'files[' + ${photo.number} + ']'" th:onchange="'readUrl(this, ' + ${photo.number} + ')'" class="disactivate_input">
+                        <button th:id="'delete_button' + ${photo.number}" class="disable_button active_delete" type="button" th:onclick="'removeImg(' + ${photo.number} + ')'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </div>
+
+                    <div th:each="photoNumber : ${#numbers.sequence(editAdvert.advert.photos.size(),7)}" class="upload_container">
+                        <label th:for="'inputFile' + ${photoNumber}"><img src="/static/img/load_image.jpg" th:id="'blah' + ${photoNumber}" alt="Img" class="img_container" on></label>
+                        <input type="text" th:name="'editNumber[' + ${photoNumber} + ']'" th:id="'text' + ${photoNumber}" style="display: none;">
+                        <input type="file" th:id="'inputFile' + ${photoNumber}" th:name="'files[' + ${photoNumber} + ']'" th:onchange="'readUrl(this, ' + ${photoNumber} + ')'" class="disactivate_input">
+                        <button th:id="'delete_button' + ${photoNumber}" class="disable_button" type="button" th:onclick="'removeImg(' + ${photoNumber} + ')'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </div>
+
+                    <!-- заменить                             заменить-->
+
+                </div>
+
+                <p class="invalid_autorisation" id="invalid_autorisation" th:text="${photoError}"></p>
+            </div>
+            <!-------------------------------------------------->
+
+            <hr>
+
+            <!---------------Фильтры ввод личных данных----------------------------------->
+            <div class="private_data advert_filters">
+                <p>Введите свои личные данные<span class="required">*</span></p>
+
+                <div class="form_data">
+                    <input th:field="*{contactPerson}" name="contactPerson" type="text" class="input" placeholder="Введите свое имя и фамилию" required autocomplete="on">
+                    <p th:if="${#fields.hasErrors('contactPerson')}" th:errors="*{contactPerson}" th:errorclass="error" class="invalid_autorisation"></p>
+                    <input th:field="*{phoneNumber}" name="phoneNumber" class="input" type="tel" placeholder="Введите номер телефона" required autocomplete="on">
+                    <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" th:errorclass="error" class="invalid_autorisation"></p>
+                    <input th:field="*{location}" name="location" class="input" type="text" placeholder="Введите местоположение" required autocomplete="on">
+                    <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" th:errorclass="error" class="invalid_autorisation"></p>
+                </div>
+
+            </div>
+
+
+            <hr>
+
+            <!--------------- Кнопка подать объявление ------------------------------>
+            <div class="advert_filters">
+                <button type="submit" class="input_button">Редактировать объявление</button>
+            </div>
+            <!-------------------------------------------------->
+        </div>
+
+    </form>
+</section>
+
+<script src="/static/js/advert/function_edit_ad.js"></script>
+<script src="/static/libs/jquery/jquery-3.5.1.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+footer {
+    background-color: #131c1f;
+    margin: 0;
+    padding: 0;
+    color: #BDC2BF;
+}
+
+.footer {
+    justify-content: space-between;
+    display: flex;
+    padding: 70px 0 50px 0;
+}
+
+.footer_name {
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.button_up {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.button_up a {
+    font-size: 30px;
+    text-decoration: none;
+    color: #BDC2BF;
+    transition: 0.2s ease-in-out;
+}
+
+.button_up i {
+    font-size: 65px;
+    transition: 0.2s ease-in-out;
+}
+
+.button_up :hover {
+    color: #49576F;
+}
+
+.copyright {
+    font-size: 20px;
+    margin: 0px;
+    padding: 0 0 50px 0;
+    text-align: center;
+}
+
+.all_lang{
+    font-size: 20px;
+    width: 220px;
+}
+
+.languages_1{
+    text-align: left;
+}
+
+.languages_2{
+    text-align: right;
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: baseHeader(~{::title},~{::link})">
+  <title>Активация аккаунта</title>
+
+  <!-- Собственный стиль-->
+  <link rel="stylesheet" href="/static/css/registration/registration_message.css">
+  <link rel="stylesheet" th:if="${event == 'accepted' || event == 'cancelChange'}" href="/static/css/registration/registration_accepted.css">
+  <link rel="stylesheet" th:if="${event == 'not accepted' || event == 'notCancelChange'}" href="/static/css/registration/registration_notAccepted.css">
+
+</head>
+
+<body th:switch="${event}">
+  <header th:replace = "fragments/general.html :: header"></header>
+
+  <section th:case="'accepted'">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-envelope-open" aria-hidden="true"></i>
+          <h1>Активация прошла успешно!</h1>
+          <p>Вам Email активирован. Успешных покупок и продаж!</p>
+          <div class="a_container">
+            <a href="/profile"><b>Мой профиль</b></a>
+            <a href="/">На главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section th:case="'not accepted'">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <h1>Активация прошла неуспешно!</h1>
+          <p>Email активировать не удалось</p>
+          <div class="a_container">
+            <a href="/registration"><b>Зарегистрироваться еще раз</b></a>
+            <a href="/">Причины ошибки</a>
+            <a href="/">На главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section th:case="'edit'">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <h1>Вы должны подтвердить ваш Email в течении 24 часов!</h1>
+          <p>Перейдите по ссылке, которую мы Вам только что выслали.
+            Если не найдете письма в почте, проверьте Спам.</p>
+          <div class="a_container">
+            <a th:href="'https://' + ${email}"><b>Проверить е-mail</b></a>
+            <a href="/">Назад на главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section th:case="'cancelChange'">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-check-square" aria-hidden="true"></i>
+          <h1>Изменения email отменено!</h1>
+          <p>Ваш email изменен на прежний.</p>
+          <div class="a_container">
+            <a th:href="'https://' + ${email}"><b>Мой профиль</b></a>
+            <a href="/">На главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section th:case="'notCancelChange'">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <h1>Не удалось отменить изменение email!</h1>
+          <p>Прошло 7 дней с момента изменения.</p>
+          <div class="a_container">
+            <a href="/">Назад на главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section th:case="*">
+    <div class="container">
+      <div class="inner_container">
+        <div class="main_container">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <h1>Вы должны активировать ваш аккаунт в течении 24 часов!</h1>
+          <p>Перейдите по ссылке, которую мы Вам только что выслали.
+            Если не найдете письма в почте, проверьте Спам.</p>
+          <div class="a_container">
+            <a th:href="'https://' + ${email}"><b>Проверить е-mail</b></a>
+            <a href="/">Назад на главную страницу</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>

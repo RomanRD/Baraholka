@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: baseHeader(~{::title},~{::link})">
+  <title>Мой профиль</title>
+
+  <link rel="stylesheet" href="/static/css/profile/my_profile.css">
+</head>
+
+<body>
+  <header th:replace="fragments/general.html :: header"></header>
+
+<!-- <div id="general_in_section"> -->
+  <section th:switch="${event}" class="section" id="section">
+    <div class="section1_container">
+      <div class="section_flex">
+
+        <div th:case="'profile'" class="left_pannel">
+          <!-- <i class="fa fa-angle-double-left" id="fa_back" aria-hidden="true"></i> -->
+          <h1>Мой профиль</h1>
+
+          <div th:if="${success == true}" class="data_saved">
+            <p class="data_saved_text">Все изменения сохренены успешно</p>
+          </div>
+
+          <div th:if="${success == false}" class="data_saved data_error">
+            <p class="data_saved_text data_error_text">Изменения не сохранились, произошла ошибка</p>
+          </div>
+
+          <form th:action="@{/profile/edit}" method = "post" th:object="${user}" enctype="multipart/form-data">
+
+          <div class="bottom_block">
+            <div class="upload_container">
+              <label for="inputFile"><img th:src="${user.photo} != null ? 'img/' + ${user.photo} : '/static/img/no-image-icon.png'" id="blah1" alt="Img" class="img_container"></label>
+              <input type="file" id="inputFile" name="img" onchange="readUrl(this, 1)" class="disactivate_input">
+              <label class="label_uopload_photo" for="inputFile">Загрузить новую фотографию</label>
+            </div>
+
+            <div class="form_container">
+              <div class="checkbox_func">
+                <label>
+                  <input type="checkbox" name="edit" th:checked="${edit}" class="checkbox" onclick="ONclick()" id="checkbox">
+                  <span class="fake"></span>
+                  <span class="checkbox_text">Редактировать данные</span>
+                  <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" th:errorclass="error"></p>
+                </label>
+              </div>
+              <input th:type="hidden" th:field="*{id}">
+              <input th:type="hidden" th:field="*{username}">
+              <input th:type="hidden" th:field="*{photo}">
+              <input th:field="*{name}" id="input_low_1" type="text" class="disable form_input" placeholder="Имя и фамилия" disabled>
+              <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="error" class="invalid_autorisation error_position_registration"></p>
+<!--              <input th:field="*{username}" class="disable form_input" id="input_low_2" type="email" placeholder="E-mail адрес" disabled>-->
+<!--              <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:errorclass="error" class="invalid_autorisation error_position_registration"></p>-->
+              <input th:field="*{phoneNumber}" class="disable form_input" id="input_low_2" type="text" placeholder="Ваш номер телефона" onkeyup="return only_num(this);" onchange="return only_num(this);" disabled>
+              <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" th:errorclass="error" class="invalid_autorisation error_position_registration"></p>
+              <input th:field="*{location}" class="disable form_input" id="input_low_3" type="text" placeholder="Ваше местоположение" disabled>
+              <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" th:errorclass="error" class="invalid_autorisation error_position_registration"></p>
+              <button type="submit" class="input_button">Сохранить изменения</button>
+            </div>
+          </div>
+          </form>
+        </div>
+
+        <div th:case="'favorites'" class="left_pannel">
+          <h1>Избранные</h1>
+
+            <p class="profile_text chosen_text">Здесь понравившиеся вам товары</p>
+
+            <div class="product_bottom_block">
+
+              <div th:each="favorite : ${favorites}" th:with="advert = ${favorite.advert}" class="product_elements">
+                <a th:href="'/advert/' + ${advert.id}">
+                  <p th:text="${advert.headline}" class="product_elements_title">Headline</p>
+                </a>
+                <a th:href="'/advert/' + ${advert.id}"><img th:src="'/img/' + ${advert.photos.get(0).filename}" alt=""></a>
+                <p th:text="${advert.priceMax} + '₴'" class="product_elements_price">Price</p>
+                <p th:text="${advert.location}" class="product_elements_location"><i class="fa fa-map-marker" aria-hidden="true"></i>Location</p>
+
+                <form th:action="'/favorites/' + ${advert.id} + '/remove'"
+                      onsubmit="return confirm('Вы действительно хотите удалить объявление?') ? true : false;" method="post">
+                  <button type="submit" class="button_delete_width delete_button">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                </form>
+
+              </div>
+            </div>
+        </div>
+
+        <div th:case="'my_adverts'" class="left_pannel">
+          <h1>Мои объявления</h1>
+
+          <div th:if="${success == true}" class="data_saved">
+            <p class="data_saved_text">Изменения сохренены</p>
+          </div>
+
+          <div th:if="${success == false}" class="data_saved data_error">
+            <p class="data_saved_text data_error_text">Изменения не сохранились, произошла ошибка</p>
+          </div>
+
+          <p class="profile_text chosen_text">Здесь находятся ваши товары</p>
+
+          <div class="product_bottom_block">
+
+            <div th:each="advert : ${adverts}" class="product_elements">
+              <a th:href="'/advert/' + ${advert.id}">
+                <p th:text="${advert.headline}" class="product_elements_title">Headline</p>
+              </a>
+              <a href="'/advert/' + ${advert.id}"><img th:src="'/img/' + ${advert.photos.get(0).filename}" alt=""></a>
+              <p th:text="${advert.priceMax} + ' ₴'" class="product_elements_price">Price</p>
+              <p th:text="${advert.location}" class="product_elements_location"><i class="fa fa-map-marker" aria-hidden="true"></i>Location</p>
+              <div class="button_set">
+                <a th:href="'/advert/' + ${advert.id} + '/edit'" class="delete_button">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <form th:action="'/advert/' + ${advert.id} + '/remove'"
+                      onsubmit="return confirm('Вы действительно хотите удалить объявление?') ? true : false;"
+                      method="post">
+                  <button type="submit" class="delete_button">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div th:case="'security'" class="left_pannel">
+          <!-- <i class="fa fa-angle-double-left" id="fa_back" aria-hidden="true"></i> -->
+          <h1>Страница безопасности</h1>
+
+          <div th:if="${success == true}" class="data_saved">
+            <p class="data_saved_text">Все изменения сохренены успешно</p>
+          </div>
+
+          <div th:if="${success == false}" class="data_saved data_error">
+            <p class="data_saved_text data_error_text">Изменения не сохранились, произошла ошибка</p>
+          </div>
+
+          <div class="security_block">
+
+            <div class="form_container">
+              <form th:action="@{/security/edit-email}" method="post">
+              <div class="security_container">
+                <p class="security_text">Изменить e-mail:</p>
+                <input class="form_input" type="email" name="newEmail" th:value="${currentEmail}" placeholder="Введите E-mail адрес">
+                <p th:text="${emailError}" class="invalid_autorisation"></p>
+                <button type="submit" class="input_button">Cменить e-mail</button>
+              </div>
+              </form>
+
+              <form th:action="@{/security/edit-password}" method="post">
+              <div>
+                <p class="security_text">Сменить пароль:</p>
+                <input class="form_input" type="password" name="currentPassword" placeholder="Введите старый пароль">
+                <p th:text="${currentPasswordError}" class="invalid_autorisation error_position_registration"></p>
+                <input class="form_input" type="password" name="newPassword" placeholder="Введите новый пароль">
+                <p th:text="${newPasswordError}" class="invalid_autorisation error_position_registration"></p>
+                <input class="form_input" type="password" name="confirmPassword" placeholder="Подтвердите новый пароль">
+                <p th:text="${confirmPasswordError}" class="invalid_autorisation error_position_registration"></p>
+                <button type="submit" class="input_button" href="registration_activation.html">Cменить пароль</button>
+              </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div th:case="'exit'" class="left_pannel">
+          <h1>Выход</h1>
+          <div class="product_bottom_block" id="product_bottom_block_float_none">
+            <p class="profile_text exit_text">Вы действительно хотите выйти с аккаунта?</p>
+            <div class="exit_button">
+              <form th:action="@{/logout}" method="post">
+                <button type="submit" name="button" class="input_button" id="exit_button" >Выйти с аккаунта</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="right_pannel_sticky">
+          <div class="right_pannel_container" id="sidebar_main">
+            <p th:class="${event}=='profile' ? 'active_sidebar':''"><a href="/profile">Мой профиль</a></p>
+            <p th:class="${event}=='favorites' ? 'active_sidebar':''"><a href="/profile/favorites">Избранные</a></p>
+            <p th:class="${event}=='my_adverts' ? 'active_sidebar':''"><a href="/profile/my_adverts">Мои объявления</a></p>
+            <p th:class="${event}=='security' ? 'active_sidebar':''"><a href="/profile/security">Безопасность</a></p>
+            <p th:class="${event}=='exit' ? 'active_sidebar':''"><a href="/profile/exit">Выход</a></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <th:block th:if="${event == 'favorites' || event == 'my_adverts'}">
+    <div th:replace="fragments/general.html :: pagination(link='/profile/' + ${event})"></div>
+  </th:block>
+
+  <footer th:replace="fragments/general.html :: footer"></footer>
+
+  <script src="/static/libs/jquery/jquery-3.5.1.min.js"></script>
+  <script src="/static/js/profile/my_profile_script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+.page_switching {
+    /* margin: 50px auto; */
+    color: #131c1f;
+}
+
+.page_switching_unordered_list {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    padding: 0;
+}
+
+.page_switching_navigation {
+    background-color: #bdc2bf;
+    padding: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.page_switching_unordered_list li {
+    list-style: none;
+    font-size: 25px;
+    margin: 0 10px 0 0;
+    transition: 0.2s;
+}
+
+.non_active_navigation {
+    border: 2px solid #bdc2bf;
+}
+
+.page_switching_unordered_list span {
+    margin: auto 10px auto 0;
+    font-size: 25px;
+}
+
+.page_switching_unordered_list span::selection {
+    background: transparent;
+}
+.page_switching_unordered_list span::-moz-selection {
+    background: transparent;
+}
+
+.page_switching_unordered_list li:hover {
+    border: 2px solid #6a768b;
+    border-radius: 3px;
+}
+
+.page_switching_unordered_list li:last-child {
+    margin: 0px;
+}
+
+.page_switching_unordered_list i {
+    font-size: 30px;
+    margin: auto 0px;
+    transition: 0.2s ease-in;
+    padding: 5px;
+}
+
+.page_switching_unordered_list i:hover {
+    color: #6b6b6b;
+}
+
+.page_switching_unordered_list a {
+    padding: 0 10px;
+    text-decoration: none;
+    color: #131c1f;
+}
+
+.page_switching_unordered_list .button {
+    margin: 0 20px 0 10px;
+    outline: none;
+    border: none;
+    background-color: #bdc2bf;
+}
+
+.active_navigation {
+    border: #49576f solid 2px;
+    background-color: #687790;
+    border-radius: 3px;
+}
+
+.active_navigation a {
+    color: #eee;
+}

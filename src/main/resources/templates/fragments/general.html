@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:fragment="baseHeader(title,links)">
+    <title th:replace="${title}">Барахолка</title>
+
+    <!--   Инструкция для IE   -->
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+
+    <!--   Отображать страницу в масштабе 100%   -->
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Нормализация стилей -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+    <!-- Собственный стиль  -->
+    <th:block th:replace="${links}" />
+    <link rel="stylesheet" href="/static/css/general/header.css">
+    <link rel="stylesheet" href="/static/css/general/footer.css">
+    <link rel="stylesheet" href="/static/css/general/pagination.css">
+    <link rel="stylesheet" href="/static/css/general/general.css">
+
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/logo_shortcut.png">
+</head>
+<body>
+
+<!--            Header          -->
+<header th:fragment="header">
+    <div class="header_bar clear_block">
+        <div class="header_conteiner">
+            <div class="image_container">
+                <a href="/"><img src="/static/img/logo_main.png" alt="logo"></a>
+            </div>
+            <div class="form_bg">
+                <form class="form_wrapper">
+                    <input type="search" name="search" placeholder="Поиск по товарам...">
+                    <button type="button" class="search_btn">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="header_navigation">
+                <nav>
+                    <ul class="main_ul">
+                        <li><a href="/" class="navigation_link">Главная <i class="fa fa-home" aria-hidden="true"></i></a></li>
+                        <li><a href="/profile" class="navigation_link">Мой профиль <i class="fa fa-user" aria-hidden="true"></i></a>
+                            <ul class="drop_down">
+                                <li><a href="/profile/favorites">Избранные</a> </li>
+                                <li><a href="/profile/my_adverts">Мои объявления</a> </li>
+                                <li><a href="/profile/security">Безопасность</a> </li>
+                                <li><a href="/profile/exit">Выход</a> </li>
+                            </ul>
+                        </li>
+                        <li><a href="/post-new-advert" class="navigation_link">Подать объявление <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></a></li>
+                        <li sec:authorize="!isAuthenticated()"><a href="/login" class="sign_in_button">Войти <i class="fa fa-user-circle-o" aria-hidden="true"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+            <!--                  Имя                   -->
+
+            <div sec:authorize="isAuthenticated()" class="user_name_photo clear_block">
+                <div class="user_name clear_block">
+                    <a href="/profile" th:text="${#authentication.getPrincipal().getName()}" >Name</a>
+                </div>
+                <div class="nav_user_photo clear_block" th:with="photoSrc = ${#authentication.getPrincipal().getPhoto()}">
+                    <a href="/profile"><img class="user_photo" th:src="${photoSrc} != null ? '/img/' + ${photoSrc} : '/static/img/no-image-icon.png'" alt="user_photo"></a>
+                </div>
+            </div>
+
+            <!--                  Имя                   -->
+        </div>
+    </div>
+</header>
+<!--    Header  -->
+
+<!--    Pagination -->
+<div th:fragment="pagination(link)" class="page_switching">
+    <nav class="page_switching_navigation">
+        <ul th:if="${page.totalPages > 1}" class="page_switching_unordered_list">
+
+            <a th:if="${page.hasPrevious()}" th:href="@{${link} + '?page=' + ${page.number}}" class="button">
+                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            </a>
+
+<!--            1 2 3 4 5 6 7 8 9 10 11         -->
+            <div style="display: flex" th:if="${page.totalPages - 1 < 11}">
+                <li th:class="${1 == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=1'}">1</a>
+                </li>
+                <li th:if="${page.totalPages > 2}"
+                    th:class="${pageNumber == page.number + 1} ? 'active_navigation' : 'non_active_navigation'"
+                    th:each="pageNumber : ${#numbers.sequence(2, page.totalPages - 1)}">
+                    <a th:href="@{${link} + '?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <li th:class="${page.getTotalPages() == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=' + ${page.getTotalPages()}}" th:text="${page.getTotalPages()}"></a>
+                </li>
+            </div>
+
+<!--            1 2 3 4 5 6 7 8 9 ... 30         -->
+            <div style="display: flex" th:if="${page.totalPages - 1 > 11 && !(page.number + 1 > 7) && !(page.number + 7 > page.totalPages - 1)}">
+                <li th:class="${1 == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=1'}">1</a>
+                </li>
+                <li th:class="${pageNumber == page.number + 1} ? 'active_navigation' : 'non_active_navigation'"
+                    th:each="pageNumber : ${#numbers.sequence(2, 9)}">
+                    <a th:href="@{${link} + '?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <span>...</span>
+                <li th:class="${page.getTotalPages() == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=' + ${page.getTotalPages()}}" th:text="${page.getTotalPages()}"></a>
+                </li>
+            </div>
+
+<!--            1 ... 13 14 15 16 17 18 19 ... 30         -->
+            <div style="display: flex" th:if="${page.totalPages - 1 > 11 && page.number + 1 > 7 && !(page.number + 7 > page.totalPages - 1)}">
+                <li th:class="${1 == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=1'}">1</a>
+                </li>
+                <span>...</span>
+                <li th:class="${pageNumber == page.number + 1} ? 'active_navigation' : 'non_active_navigation'"
+                    th:if="${page.totalPages - 1 > 11 && page.number + 1 > 7 && !(page.number + 7 > page.totalPages - 1)}"
+                    th:each="pageNumber : ${#numbers.sequence(page.number - 2, page.number + 4 )}">
+                    <a th:href="@{${link} + '?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <span>...</span>
+                <li th:class="${page.getTotalPages() == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=' + ${page.getTotalPages()}}" th:text="${page.getTotalPages()}"></a>
+                </li>
+            </div>
+
+<!--            1 ... 22 23 24 25 26 27 28 29 30         -->
+            <div style="display: flex" th:if="${page.totalPages - 1 > 11 && page.number + 7 > page.totalPages - 1}">
+                <li th:class="${1 == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=1'}">1</a>
+                </li>
+                <span>...</span>
+                <li th:class="${pageNumber == page.number + 1} ? 'active_navigation' : 'non_active_navigation'" th:each="pageNumber : ${#numbers.sequence(page.getTotalPages()-8, page.getTotalPages()-1)}">
+                    <a th:href="@{${link} + '?page=' + ${pageNumber}}" th:text="${pageNumber}"></a>
+                </li>
+                <li th:class="${page.getTotalPages() == page.number + 1} ? 'active_navigation' : 'non_active_navigation'">
+                    <a th:href="@{${link} + '?page=' + ${page.getTotalPages()}}" th:text="${page.getTotalPages()}"></a>
+                </li>
+            </div>
+
+            <a th:if="${page.hasNext()}" th:href="@{${link} + '?page=' + ${page.number + 2}}" th:class="button">
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </a>
+
+        </ul>
+    </nav>
+</div>
+<!--    Pagination -->
+
+<!--    Footer  -->
+
+<footer th:fragment="footer">
+    <div class="section_container">
+        <div class="footer">
+
+            <div>
+                <p class="footer_name">Sergio Diorov</p>
+                <p class="all_lang languages_1">(HTML, CSS, JS)</p>
+            </div>
+
+            <div class="button_up">
+                <a href="#top"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>
+                <p class="button"><a href="#top">Вернуться наверх</a></p>
+            </div>
+
+            <div>
+                <p class="footer_name">Roman Gorkun</p>
+                <p class="all_lang languages_2">Java, Spring, Hibernate, Thymeleaf, JS</p>
+            </div>
+
+        </div>
+        <p class="copyright">Copyright © 2020 by Placeholder Corporation. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!--    Footer  -->
+
+</body>
+</html>

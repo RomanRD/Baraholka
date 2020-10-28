@@ -1,0 +1,279 @@
+.section_1 {
+  margin: 100px 0 30px 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1300px;
+  padding: 10px;
+  background-color: rgba(73, 87, 111, 0.5);
+  border-radius: 3px;
+  text-align: center;
+}
+
+.main_container {
+  background-color: #dadada;
+  border-radius: 3px;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left_pannel {
+  width: 700px;
+  border-right: 3px solid rgba(73, 87, 111, 0.5);
+  padding: 0 50px 0 50px;
+}
+
+.left_pannel_head {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 3px solid #eee;
+  margin: 0 0 30px 0;
+}
+
+/* .left_pannel img {
+  width: 691px;
+  height: 500px;
+  object-fit: cover;
+  border: 5px solid #49576f;
+} */
+.i-fa {
+  margin: auto 0;
+  color: #26344c;
+}
+
+.i-fa a{
+  outline: none;
+  border: none;
+  background: none;
+  color: #49576f;
+}
+
+.i-fa button{
+  outline: none;
+  border: none;
+  background: none;
+  color: #49576f;
+}
+
+.fa-heart {
+  font-size: 25px !important;
+  transition: 0.2s ease-in;
+}
+
+.fa-heart:hover {
+  color: red;
+}
+
+.set_red_heart {
+  color: red !important;
+}
+
+.i-fa i:active {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.3);
+  transform: scale(1.3);
+}
+
+h1 {
+  font-size: 35px;
+  color: #26344c;
+  margin: 5px 0 0 0;
+  text-align: center;
+  padding: 0 0 15px 0;
+}
+
+.one_photo {
+  width: 700px;
+  max-height: 650px;
+  overflow: hidden;
+  object-fit: contain;
+}
+
+h2 {
+  color: #26344c;
+  font-size: 22px;
+  border-top: 3px solid #eee;
+  margin-top: 30px;
+}
+
+.description {
+  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  border-bottom: 3px solid #eee;
+  font-size: 16px;
+  padding: 10px 0;
+  line-height: 1.6;
+  margin: 10px;
+  color: #26344c;
+}
+
+.user_information img {
+  width: 70px;
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.location_and_time {
+  display: flex;
+  justify-content: space-between;
+  color: #26344c;
+}
+
+.location_and_time p {
+  padding: 0 20px;
+  margin: 5px 10px;
+}
+
+/* ------------------------------------------------------------------------- */
+.right_pannel {
+  width: 100%;
+  padding: 0 50px;
+  color: #26344c;
+  margin: 73px 0 0 0;
+}
+
+.right_pannel_container {
+  border: 5px solid #49576f;
+  padding: 20px;
+  background-color: #eee;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+  border-bottom: 3px solid #d3d3d3;
+  padding: 0 0 10px 0;
+}
+
+.price i {
+  font-size: 14px;
+}
+
+.price p {
+  color: #009f54;
+  margin: 0;
+  font-size: 35px;
+}
+
+.ph_and_name {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+  border-bottom: 3px solid #d3d3d3;
+  padding: 0 0 10px 0;
+}
+
+.ph_and_name p {
+  text-align: center;
+  margin: auto auto auto 25px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 235px;
+  font-size: 24px;
+}
+
+.price i {
+  transition: 0.2s ease-in-out;
+}
+
+.span_price {
+  font-size: 32px;
+}
+
+.old_price {
+  color: #fb4848 !important;
+}
+
+.user_information button {
+  display: block;
+  font-size: 15px;
+  margin: 0 auto;
+  font-weight: bold;
+  outline: none;
+}
+
+.other_inf_button {
+  border: none;
+  transition: 0.3s ease-in-out;
+  color: #5e5e5e;
+}
+
+.other_inf_button:hover {
+  color: #a4a4a4;
+  text-decoration: underline;
+}
+
+.message_button {
+  border: 3px solid #d3d3d3;
+  background-color: #d3d3d3;
+  padding: 10px 20px;
+  border-radius: 3px;
+  transition: 0.2s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.message_button:hover {
+  background-color: #eee;
+}
+
+.number {
+  font-size: 18px;
+  margin: 10px 0;
+  font-weight: bold;
+  color: black;
+}
+
+.sticky {
+  position: sticky;
+  top: 80px;
+}
+
+#fa_back {
+  position: absolute;
+  left: 126px;
+  font-size: 40px;
+  top: 128px;
+  background: #dadada;
+  padding: 5px 10px 5px 10px;
+  transition: 0.1s ease-in-out;
+  color: #26344c;
+  text-decoration: none;
+}
+
+#fa_back:hover {
+  animation: fa_back_animation 0.6s;
+  color: #49576f;
+}
+
+@keyframes fa_back_animation {
+  0% {
+    left: 126px;
+  }
+
+  25% {
+    left: 130px;
+  }
+
+  50% {
+    left: 126px
+  }
+
+  75% {
+    left: 130px;
+  }
+
+  100% {
+    left: 126px;
+  }
+}
+
+.button_back {
+  border: none;
+  margin: 0;
+  padding: 0;
+}

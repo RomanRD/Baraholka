@@ -1,0 +1,135 @@
+.wrepper{
+  width: 690px;
+  margin: 0 auto;
+}
+.slider {
+  position: relative;
+  padding: 0 70px;
+}
+
+/* Слайдер */
+.slick-slider {}
+
+/* Слайдер запущен */
+.slick-slider.slick-initialized {}
+
+/* Слайдер с точками */
+.slick-slider.slick-dotted {}
+
+/* Ограничивающая оболочка */
+.slick-list {
+  overflow: hidden;
+}
+
+/* Лента слайдов */
+.slick-track {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Слайд */
+.slick-slide {}
+
+/* Слайд активный (показывается) */
+.slider_small_item.slick-slide.slick-active img{
+  border: 3px #eee solid;
+}
+
+/* Слайд основной */
+.slider_small_item.slick-slide.slick-current img{
+  border: 3px #49576f solid;
+  border-radius: 2px;
+}
+
+/* Слайд по центру */
+.slick-slide.slick-center {}
+
+/* Клонированный слайд */
+.slick-slide.slick-cloned {}
+
+/* Стрелка */
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  margin: -30px 0px 0px 0px;
+  z-index: 10;
+  font-size: 0;
+  width: 50px;
+  height: 50px;
+  border: none;
+  outline: none;
+}
+
+/* Стрелка влево */
+.slick-arrow.slick-prev {
+  left: 0;
+  background: url(/static/img/slider-left.png) 0 0/100% no-repeat;
+}
+
+/* Стрелка вправо */
+.slick-arrow.slick-next {
+  right: 0;
+  background: url(/static/img/slider-right.png) 0 0/100% no-repeat;
+  color: black;
+}
+
+/* Стрелка не активная */
+.slick-arrow.slick-disabled {}
+
+/* Точки (булиты) */
+.slick-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.slick-dots li {
+  list-style: none;
+  padding: 0 5px;
+}
+
+/* Активная точка */
+.slick-dots li.slick-active button {
+  background-color: transparent;
+  border: 2px solid #26344c;
+}
+
+/* Элемент точки */
+.slick-dots li button {
+  font-size: 0;
+  width: 16px;
+  height: 16px;
+  border: none;
+  outline: none;
+  background-color: #26344c;
+  border-radius: 50%;
+}
+
+.slider_item{
+  text-align: center;
+  outline: none;
+}
+
+.slider_small_item{
+  text-align: center;
+  outline: none;
+}
+
+.slider div{
+  z-index: 0;
+}
+
+.slider img {
+  max-width: 100%;
+  height: 420px;
+  overflow: hidden;
+  object-fit: contain;
+}
+
+.slider_small img{
+  width: 170px;
+  height: 105px;
+  overflow: hidden;
+  object-fit: cover;
+}

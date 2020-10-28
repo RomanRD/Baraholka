@@ -1,0 +1,23 @@
+/* -------------------------------------------------------------------------- */
+.main_container i {
+  font-size: 100px;
+  display: block;
+  text-align: center;
+  color: #b54d4d;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.inner_container {
+  margin-top: 70px;
+  background-color: #aa8484;
+  padding: 20px;
+  width: 350px;
+  border-radius: 2px;
+  box-shadow: 0 0 10px #b54d4d;
+}
+
+.main_container a:hover {
+  color: #b54d4d;
+  border-bottom: 1px solid rgb(238, 238, 238);
+}

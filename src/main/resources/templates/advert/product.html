@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="fragments/general.html :: baseHeader(~{::title},~{::link})">
+  <meta charset="utf-8">
+  <title th:text="${advert.headline}"></title>
+
+  <!-- Собственный стиль-->
+  <link rel="stylesheet" href="/static/css/advert/product.css">
+  <link rel="stylesheet" href="/static/css/advert/slider.css">
+
+</head>
+
+<body>
+  <header th:replace="fragments/general.html :: header"></header>
+
+  <section class="section_1">
+    <div class="container">
+      <div class="main_container">
+
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="left_pannel">
+
+          <div class="left_pannel_head">
+
+            <button onclick="history.back()" class="button_back"><i class="fa fa-angle-double-left" id="fa_back" aria-hidden="true"></i></button>
+            <h1 th:text="${advert.headline}">Headline</h1>
+            <form th:action="@{/favorites}" method = "post" id="favorites-form" class="i-fa">
+              <input type="hidden" name="advertId" th:value="${advert.id}">
+              <a sec:authorize="!isAuthenticated()" href="/login"><i class="fa fa-heart color_defolt" aria-hidden="true"></i></a>
+              <button sec:authorize="isAuthenticated()" type="submit" name="button" id="heart_button" class="heart_button" onclick="clickFunc()">
+                      <i class="fa fa-heart color_defolt" th:classappend="${favorite} ? 'set_red_heart' : ''" aria-hidden="true" id="heart"></i>
+              </button>
+<!--              <i class="fa fa-heart" aria-hidden="true"></i>-->
+            </form>
+
+          </div>
+
+
+          <img class="one_photo" th:if="${advert.photos.size()<2}" th:src="'/img/' + ${advert.photos.get(0).filename}" alt="Фото товара">
+
+          <div th:unless="${advert.photos.size()<2}" class="wrepper">
+            <div class="slider">
+              <div th:each="photo : ${advert.photos}" class="slider_item">
+                <img th:src="'/img/' + ${photo.getFilename()}" alt="">
+              </div>
+            </div>
+          </div>
+
+            <div class="inner_description">
+              <h2>Описание товара</h2>
+              <p th:text="${advert.description}" class="description"></p>
+
+              <div class="location_and_time">
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i><span th:text="' ' + ${advert.location}"></span></p>
+                <p><i class="fa fa-clock-o" aria-hidden="true"></i><span th:text="' ' + ${advert.getDate()}"></span></p>
+              </div>
+            </div>
+        </div>
+
+          <!-- ----------------------------------------------------------------------- -->
+          <div class="right_pannel">
+            <div class="sticky">
+              <div class="right_pannel_container">
+
+                <div class="price">
+                  <p><span th:text="${advert.currentPrice} + ' ₴'">Current price</span><i class="fa fa-arrow-down" aria-hidden="true"></i></p>
+                  <!-- <span class="span_price">|</span> -->
+                  <p class="old_price"><span th:text="${advert.priceMax} + ' ₴'">Max price</span><i class="fa fa-times-circle" aria-hidden="true"></i></p>
+                </div>
+
+                <div class="user_information">
+                  <div class="ph_and_name" th:with="photoSrc = ${advert.author.photo}">
+                    <img th:src="${photoSrc} != null ? '/img/' + ${photoSrc} : '/static/img/no-image-icon.png'">
+                    <p th:text="${advert.author.name}"></p>
+                  </div>
+                  <button class="other_inf_button">Другие объявления пользователя</button>
+                  <p th:text="${advert.phoneNumber}" class="number"></p>
+                  <button type="button" name="button" class="message_button">Написать продавцу</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ----------------------------------------------------------------------- -->
+
+        </div>
+      </div>
+  </section>
+
+  <footer th:replace="fragments/general.html :: footer"></footer>
+
+  <!-- Подключение библиотеки JQuery -->
+  <script src="/static/libs/jquery/jquery-3.5.1.min.js"></script>
+  <!-- Подключение скрипта слaйдера -->
+  <script src="/static/js/advert/slick.min.js"></script>
+  <!-- Подключение собственного скрипта -->
+  <script src="/static/js/advert/slider.js"></script>
+  <script type="text/javascript">
+    let heart;
+    let frm;
+    function clickFunc() {
+      frm = $("#favorites-form");
+      frm.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: frm.attr('method'),
+          url: frm.attr('action'),
+          data: frm.serialize(),
+          success: function (data) {
+            console.log('Submission was successful.');
+            console.log(data);
+          },
+          error: function (data) {
+            console.log('An error occurred.');
+            console.log(data);
+          },
+        });
+      });
+
+      heart = document.querySelector("#heart");
+      heart.classList.toggle("set_red_heart");
+    };
+  </script>
+</body>
+
+</html>
